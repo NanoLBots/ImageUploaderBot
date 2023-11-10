@@ -1,6 +1,6 @@
 import logging
 import os
-# import uvloop
+import uvloop
 
 from imagehost.aio import ImageHost
 from imagehost.exceptions import ApiError
@@ -9,7 +9,7 @@ from pyrogram.enums import ParseMode
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
 logging.basicConfig(level=logging.WARNING, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-# uvloop.install()
+uvloop.install()
 
 mime_types_allowed = [
     'image/jpeg',
