@@ -1,6 +1,6 @@
 import logging
 import os
-import uvloop
+# import uvloop
 
 from imagehost.aio import ImageHost
 from imagehost.exceptions import ApiError
@@ -9,7 +9,7 @@ from pyrogram.enums import ParseMode
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
 logging.basicConfig(level=logging.WARNING, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-uvloop.install()
+# uvloop.install()
 
 mime_types_allowed = [
     'image/jpeg',
@@ -97,6 +97,11 @@ async def send_image_link(_, m: Message):
         )
         if os.path.exists(path):
             os.remove(path)
+
+
+@bot.on_message(filters.command('repo'))
+async def send_repo(_, m: Message):
+    await m.reply('https://github.com/samuelmarc/ImageUploaderBot')
 
 
 async def main():
