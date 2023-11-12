@@ -79,7 +79,11 @@ async def send_image_link(_, m: Message):
             return
         file_size = m.document.file_size
     else:
-        file_size = m.photo.file_size
+        if m.photo:
+            file_size = m.photo.file_size
+        else:
+            await m.reply('**This file type is not supported.**')
+            return
     if file_size > max_size_allowed:
         await m.reply('**The file size exceeds 10MB** (__understand that this is necessary for the Telegram '
                       'preview to be preserved__).')
