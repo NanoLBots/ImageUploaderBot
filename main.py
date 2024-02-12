@@ -2,11 +2,17 @@ import logging
 import os
 import uvloop
 
+from dotenv import load_dotenv
 from imagehost.aio import ImageHost
 from imagehost.exceptions import ApiError
-from pyrogram import Client, filters, idle
-from pyrogram.enums import ParseMode
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from hydrogram import Client, filters, idle
+from hydrogram.enums import ParseMode
+from hydrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+
+
+if os.path.exists('.env'):
+    load_dotenv('.env')
+
 
 logging.basicConfig(level=logging.WARNING, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 uvloop.install()
@@ -75,29 +81,28 @@ async def send_image_link(_, m: Message):
         m = m.reply_to_message
     if m.document:
         if m.document.mime_type not in mime_types_allowed:
-            await m.reply('**This file type is not supported.**')
+            await m.reply('**This file type is not supported.**', quote=True)
             return
         file_size = m.document.file_size
     else:
         if m.photo:
             file_size = m.photo.file_size
         else:
-            await m.reply('**This file type is not supported.**')
+            await m.reply('**This file type is not supported.**', quote=True)
             return
     if file_size > max_size_allowed:
         await m.reply('**The file size exceeds 10MB** (__understand that this is necessary for the Telegram '
-                      'preview to be preserved__).')
+                      'preview to be preserved__).', quote=True)
         return
-    progress = await m.reply('⬇️ **Downloading your image...**')
     path = await m.download()
-    await progress.edit('⬆️ **Uploading your image...**')
     try:
         image = await imageup.upload(path)
         os.remove(path)
-        await progress.edit(image['image']['url'])
+        await m.reply(image['image']['url'], quote=True)
     except ApiError as e:
-        await progress.edit(
-            f'**An error has occurred and your image cannot be uploaded:\n\n**||`{e.message}`||'
+        await m.reply(
+            f'**An error has occurred and your image cannot be uploaded:\n\n**||`{e.message}`||',
+            quote=True
         )
         if os.path.exists(path):
             os.remove(path)

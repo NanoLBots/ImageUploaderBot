@@ -1,4 +1,5 @@
 freeimagehost
-Pyrogram
-TgCrypto
+hydrogram
+tgcrypto
 uvloop
+python-dotenv
