@@ -24,7 +24,7 @@
             "description": "Get this from @BotFather XD",
             "required": true
         },
-        "API": {
+        "API_KEY": {
             "description": "You Can Get An API Key From https://api.imgbb.com.",
             "required": true
         }
